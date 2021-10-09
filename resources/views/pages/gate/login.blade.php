@@ -9,7 +9,7 @@
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <a href="https://kursusmengemudiairlangga.com/">Kursus Mengemudi Airlangga</a>
+    <a href="{{ url('/') }}"><img width="350" src="{{ url('assets') }}/logo.png"></a>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">

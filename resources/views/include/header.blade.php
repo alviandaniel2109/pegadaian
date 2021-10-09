@@ -25,13 +25,13 @@
           <li class="dropdown notifications-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-bell-o"></i>
-              <span class="label label-warning">{{ count($pegadaian) }}</span>
+              <span class="label label-warning notif_count">{{ count($pegadaian) }}</span>
             </a>
             <ul class="dropdown-menu">
-              <li class="header">Ada {{ count($pegadaian) }} Yang Jatuh Tempo</li>
+              <li class="header notif_jth">Ada {{ count($pegadaian) }} Yang Jatuh Tempo</li>
               <li>
                 <!-- inner menu: contains the actual data -->
-                <ul class="menu">
+                <ul class="menu listNotif">
                   @foreach($pegadaian as $pegadaians)  
                   <li>
                     <a href="{{ route('pegadaian.getReport', $pegadaians->uuid) }}" target="_blank">

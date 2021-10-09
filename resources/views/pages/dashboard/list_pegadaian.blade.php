@@ -29,47 +29,27 @@
             <table id="pegadaian" url="{{ route('pegadaian.datatables') }}" class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th data-column="DT_RowIndex" data-searchable="false" data-orderable="false">No</th>
+                        <th data-column="id" data-searchable="true" data-orderable="true">Nomor Peminjaman</th>
                         <th data-column="nik_peminjam" data-searchable="true" data-orderable="true">NIK Peminjam</th>
                         <th data-column="nama_peminjam" data-searchable="true" data-orderable="true">Nama Peminjam</th>
                         <th data-column="alamat_peminjam" data-searchable="true" data-orderable="true">Alamat Peminjam</th>
                         <th data-column="no_telepon" data-searchable="true" data-orderable="true">No Telepon Peminjam</th>
                         <th data-column="tanggal_masuk_pinjaman" data-searchable="true" data-orderable="true">Tanggal Peminjaman</th>
                         <th data-column="tanggal_jatuh_tempo" data-searchable="true" data-orderable="true">Tanggal Jatuh Tempo</th>
+                        <th data-column="tanggal_perpanjangan" data-searchable="false" data-orderable="false">Tanggal Perpanjangan</th>
+                        <th data-column="tanggal_perpanjangan_jatuh_tempo" data-searchable="false" data-orderable="false">Tanggal Perpanjangan Jatuh Tempo</th>
                         <th data-column="jumlah_pinjaman" data-searchable="true" data-orderable="true">Jumlah Pinjaman</th>
                         <th data-column="jumlah_tebusan" data-searchable="true" data-orderable="true">Jumlah Tebusan</th>
                         <th data-column="keterangan_jaminan" data-searchable="true" data-orderable="true">Keterangan Jaminan</th>
+                        <th data-column="denda" data-searchable="false" data-orderable="false">Denda</th>
                         <th data-column="status" data-searchable="true" data-orderable="true">Status Jaminan</th>
                         <th data-column="created_at" data-searchable="true" data-orderable="true">Diinput Pada</th>
-                        <th data-column="tebus" data-searchable="false" data-orderable="false">Tebus</th>
-                        <th data-column="perpanjang" data-searchable="false" data-orderable="false">Perpanjang</th>
-                        <th data-column="lelang" data-searchable="false" data-orderable="false">Lelang</th>
-                        <th data-column="view" data-searchable="false" data-orderable="false">Lihat</th>
+                        <th data-column="action" data-searchable="false" data-orderable="false">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
 
                 </tbody>
-                <tfoot>
-                    <tr>
-                        <th>No</th>
-                        <th>NIK Peminjam</th>
-                        <th>Nama Peminjam</th>
-                        <th>No Telepon Peminjam</th>
-                        <th>Alamat Peminjam</th>
-                        <th>Tanggal Peminjaman</th>
-                        <th>Tanggal Jatuh Tempo</th>
-                        <th>Jumlah Pinjaman</th>
-                        <th>Jumlah Tebusan</th>
-                        <th>Keterangan Jaminan</th>
-                        <th>Status Jaminan</th>
-                        <th>Diinput Pada</th>
-                        <th>Tebus</th>
-                        <th>Perpanjang</th>
-                        <th>Lelang</th>
-                        <th>Lihat</th>
-                    </tr>
-                </tfoot>
             </table>
         </div>
         <!-- /.box-body -->
@@ -116,6 +96,11 @@
             getViewModal(_url, _modal_perpanjangan);
         });
 
+        $(document).on('click', '.edit', function() {
+            let _url = $(this).attr('url');
+            getViewModal(_url, _modal);
+        });
+
         $(document).on('click', '.report', function () {
             let _url = $(this).attr('url');
             window.open(_url);
@@ -130,6 +115,9 @@
                     SuccessNotif(data.messages);
                     _modal.modal('hide');
                     _table.DataTable().ajax.reload();
+                    $('.notif_count').html(data.count_notif);
+                    $('.notif_jth').html('Ada ' + data.count_notif + ' Yang Jatuh Tempo');
+                    $('.listNotif').html(data.html_notif);
                 } else if(data.status == 'failed') {
                     FailedNotif(data.messages);
                 }
@@ -145,6 +133,9 @@
                     SuccessNotif(data.messages);
                     _modal_perpanjangan.modal('hide');
                     _table.DataTable().ajax.reload();
+                    $('.notif_count').html(data.count_notif);
+                    $('.notif_jth').html('Ada ' + data.count_notif + ' Yang Jatuh Tempo');
+                    $('.listNotif').html(data.html_notif);
                 } else if(data.status == 'failed') {
                     FailedNotif(data.messages);
                 }
@@ -165,6 +156,9 @@
                         if (data.status == "success") {
                             Swal.fire("Sukses", data.messages, 'success');
                             _table.DataTable().ajax.reload();
+                            $('.notif_count').html(data.count_notif);
+                            $('.notif_jth').html('Ada ' + data.count_notif + ' Yang Jatuh Tempo');
+                            $('.listNotif').html(data.html_notif);
                         }
                     }, _url, "json", "get");
                 }
@@ -185,8 +179,34 @@
                         if (data.status == "success") {
                             Swal.fire("Sukses", data.messages, 'success');
                             _table.DataTable().ajax.reload();
+                            $('.notif_count').html(data.count_notif);
+                            $('.notif_jth').html('Ada ' + data.count_notif + ' Yang Jatuh Tempo');
+                            $('.listNotif').html(data.html_notif);  
                         }
                     }, _url, "json", "get");
+                }
+            });
+        });
+
+        $(document).on('click', '.delete', function() {
+            let _url = $(this).attr('url');
+            Swal.fire({
+                title: 'Apakah Anda Yakin Menghapus Data Ini ?',
+                showCancelButton: true,
+                confirmButtonText: `Hapus`,
+                confirmButtonColor: '#d33',
+                icon: 'question'
+            }).then((result) => {
+                if (result.value) {
+                    send((data, xhr = null) => {
+                        if (data.status == "success") {
+                            Swal.fire("Sukses", data.messages, 'success');
+                            _table.DataTable().ajax.reload();
+                            $('.notif_count').html(data.count_notif);
+                            $('.notif_jth').html('Ada ' + data.count_notif + ' Yang Jatuh Tempo');
+                            $('.listNotif').html(data.html_notif);  
+                        }
+                    }, _url, "json", "delete");
                 }
             });
         });

@@ -37,6 +37,7 @@ if(Route::middleware(['auth'])->group(function () {
     Route::get('/pegadaian/lelang/{pegadaian}', 'PegadaianController@lelang')->name('pegadaian.lelang');
     Route::get('/pegadaian/getPdf/{pegadaian}', 'PegadaianController@getReport')->name('pegadaian.getReport');
     Route::get('/pegadaian/downloadReport/{pegadaian}', 'PegadaianController@downloadReport')->name('pegadaian.downloadReport');
+    Route::get('/pegadaian/print/{pegadaian}', 'PegadaianController@print')->name('pegadaian.print');
     // Route::get('/backend/pendaftar/create', 'RegisterUserController@create')->name('pendaftar.create');
     // Route::post('/backend/pendaftar/store', 'RegisterUserController@store')->name('pendaftar.store');
     // Route::get('/backend/pendaftar/edit/{register}', 'RegisterUserController@edit')->name('pendaftar.edit');
